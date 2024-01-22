@@ -11,11 +11,11 @@ class Snake {
     this.currentDirection = 1;
   }
   turnLeft() {
-    this.currentDirection = (this.currentDirection + 3) % 4; 
+    this.currentDirection = (this.currentDirection + 3) % 4;
   }
 
   turnRight() {
-    this.currentDirection = (this.currentDirection + 1) % 4; 
+    this.currentDirection = (this.currentDirection + 1) % 4;
   }
   move(distance: number) {
     if (this.currentDirection === 0) {
@@ -43,8 +43,6 @@ class Snake {
   turn() {
     this.currentDirection *= -1;
   }
-  get position(): number {
-    return this.currentPosition;
-  }
 }
 export default Snake;
+
