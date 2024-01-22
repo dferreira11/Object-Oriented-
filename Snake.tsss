@@ -4,17 +4,40 @@ import display from "./display";
 // place your code on line 5 above the export statement below
 
 class Snake {
-  private currentPosition: number;
+  private currentPosition: Point;
   private currentDirection: number;
   constructor() {
-    this.currentPosition = 0;
+    this.currentPosition = new Point(0, 0);
     this.currentDirection = 1;
   }
+  turnLeft() {
+    this.currentDirection = (this.currentDirection + 3) % 4; // Rotate 90 degrees to the left
+  }
+
+  turnRight() {
+    this.currentDirection = (this.currentDirection + 1) % 4; // Rotate 90 degrees to the right
+  }
   move(distance: number) {
-    if (this.currentPosition === 1) {
-      this.currentPosition += distance;
-    } else {
-      this.currentPosition -= distance;
+    if (this.currentDirection === 0) {
+      this.currentPosition = new Point(
+        this.currentPosition.x,
+        this.currentPosition.y - distance,
+      );
+    } else if (this.currentDirection === 1) {
+      this.currentPosition = new Point(
+        this.currentPosition.x + distance,
+        this.currentPosition.y,
+      );
+    } else if (this.currentDirection === 2) {
+      this.currentPosition = new Point(
+        this.currentPosition.x,
+        this.currentPosition.y + distance,
+      );
+    } else if (this.currentDirection === 3) {
+      this.currentPosition = new Point(
+        this.currentPosition.x - distance,
+        this.currentPosition.y,
+      );
     }
   }
   turn() {
