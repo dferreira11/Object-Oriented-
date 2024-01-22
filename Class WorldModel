@@ -1,0 +1,16 @@
+class WorldModel {
+  private snake: Snake;
+
+  constructor(snake: Snake) {
+    this.snake = snake;
+  }
+
+  update(steps: number) {
+    this.snake.move(steps);
+  }
+
+  getSnake(): Snake {
+    return this.snake;
+  }
+}
+
