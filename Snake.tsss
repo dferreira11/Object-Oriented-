@@ -11,11 +11,11 @@ class Snake {
     this.currentDirection = 1;
   }
   turnLeft() {
-    this.currentDirection = (this.currentDirection + 3) % 4; // Rotate 90 degrees to the left
+    this.currentDirection = (this.currentDirection + 3) % 4; 
   }
 
   turnRight() {
-    this.currentDirection = (this.currentDirection + 1) % 4; // Rotate 90 degrees to the right
+    this.currentDirection = (this.currentDirection + 1) % 4; 
   }
   move(distance: number) {
     if (this.currentDirection === 0) {
