@@ -11,7 +11,7 @@ export default function App() {
     document.getElementById("output")!.innerText = "OUTPUT:\n";
     display("hey");
     const snake = new Snake();
-    snake.move();
+    snake.move(3);
     snake.turn();
     const worldModel = new WorldModel(snake);
   }, []);
