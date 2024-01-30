@@ -1,8 +1,13 @@
+import Snake from "./Snake";
 class WorldModel {
   private snake: Snake;
+  private width: number;
+  private height: number;
 
-  constructor(snake: Snake) {
+  constructor(snake: Snake, width: number, height: number) {
     this.snake = snake;
+    this.width = width;
+    this.height = height;
   }
 
   update(steps: number) {
@@ -12,5 +17,13 @@ class WorldModel {
   getSnake(): Snake {
     return this.snake;
   }
-}
 
+  get width(): number {
+    return this.width;
+  }
+
+  get height(): number {
+    return this.height;
+  }
+}
+export default WorldModel;
