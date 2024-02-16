@@ -1,17 +1,23 @@
 import Snake from "./Snake";
+import CanvasWorldView from "./CanvasWorldView";
+import IWorldView from "./IWorldView";
 class WorldModel {
   private snake: Snake;
-  private width: number;
-  private height: number;
+  private width_: number;
+  private height_: number;
+  private worldView: IWorldView | null = null;
 
   constructor(snake: Snake, width: number, height: number) {
     this.snake = snake;
-    this.width = width;
-    this.height = height;
+    this.width_ = width;
+    this.height_ = height;
   }
 
   update(steps: number) {
     this.snake.move(steps);
+    if (this.worldView !== null) {
+      this.worldView.display(this);
+    }
   }
 
   getSnake(): Snake {
@@ -19,11 +25,14 @@ class WorldModel {
   }
 
   get width(): number {
-    return this.width;
+    return this.width_;
   }
 
   get height(): number {
-    return this.height;
+    return this.height_;
+  }
+  set view(worldView: IWorldView | null) {
+    this.worldView = worldView;
   }
 }
 export default WorldModel;
