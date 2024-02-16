@@ -8,12 +8,4 @@ abstract class Player {
 
   abstract makeTurn(): void;
 }
-
-class AvoidWallsPlayer extends Player {
-  constructor(sc: SnakeController) {
-    super(sc);
-  }
-
-  makeTurn() {}
-}
 export default Player;
