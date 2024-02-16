@@ -15,3 +15,4 @@ class Point {
     return this.ycoord;
   }
 }
+export default Point;
