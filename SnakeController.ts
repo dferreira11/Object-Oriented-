@@ -1,3 +1,4 @@
+import Point from "./Point";
 import WorldModel from "./WorldModel";
 import Snake from "./Snake";
 class SnakeController {
@@ -18,11 +19,11 @@ class SnakeController {
   }
 
   get snakePosition(): Point {
-    return this.slitherer.position;
+    return this.slitherer.currentposition;
   }
 
   get snakeDirection(): number {
-    return this.slitherer.direction;
+    return this.slitherer.currentdirection;
   }
 
   get worldWidth(): number {
