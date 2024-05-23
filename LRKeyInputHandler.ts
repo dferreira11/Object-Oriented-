@@ -5,7 +5,7 @@ export default class LRKeyInputHandler implements IInputHandler {
   private wasRightArrowPushed: boolean = false;
 
   constructor() {
-    // Set up event listeners for keydown events
+    //Making up listener for keydown events
     window.addEventListener("keydown", this.handleKeyDown.bind(this));
   }
 
