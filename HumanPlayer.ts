@@ -8,19 +8,17 @@ export default class HumanPlayer extends Player {
   private handler: IInputHandler;
 
   constructor(controller: SnakeController, handler: IInputHandler) {
-    super([controller]); // Assuming the Player's constructor doesn't require parameters. Adjust if necessary.
+    super([controller]); 
     this.controller = controller;
     this.handler = handler;
   }
 
   makeTurn(): void {
-    // Check if a left move should be made
     if (this.handler.madeLeftMove() === true) {
       console.log("Handler made left move: " + this.handler.madeLeftMove());
       this.controller.turnSnakeLeft();
       this.handler.resetLeftMove();
     }
-    // Check if a right move should be made
     else if (this.handler.madeRightMove() === true) {
       console.log("Handler made right move: " + this.handler.madeRightMove());
       this.controller.turnSnakeRight();
