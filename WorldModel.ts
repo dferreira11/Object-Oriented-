@@ -1,38 +1,90 @@
 import Snake from "./Snake";
-import CanvasWorldView from "./CanvasWorldView";
 import IWorldView from "./IWorldView";
-class WorldModel {
-  private snake: Snake;
+import IActor from "./IActor";
+import ActorCollisionHandler from "./ActorCollisionHandlers";
+import ArrayIterator from "./ArrayIterator";
+import ICollidable from "./ICollidable";
+export default class WorldModel {
+  private allActors: IActor[];
+  private allViews: IWorldView[];
   private width_: number;
   private height_: number;
-  private worldView: IWorldView | null = null;
-
-  constructor(snake: Snake, width: number, height: number) {
-    this.snake = snake;
+  private aca: ActorCollisionHandler;
+  constructor(width: number, height: number, aca: ActorCollisionHandler) {
     this.width_ = width;
     this.height_ = height;
+    this.allActors = [];
+    this.allViews = [];
+    this.aca = aca;
+  }
+  public addActors(actors: IActor[]) {
+    this.allActors = this.allActors.concat(actors)
   }
 
-  update(steps: number) {
-    this.snake.move(steps);
-    if (this.worldView !== null) {
-      this.worldView.display(this);
+  public addViews(views: IWorldView[]) {
+    this.allViews = this.allViews.concat(views);
+  }
+  public get actors() {
+    return this.allActors;
+  }
+  public get position() {
+    return new ArrayIterator(this.actors);
+  }
+  public get views() {
+    return this.allViews;
+  }
+  public get WorldWidth() {
+    return this.width_;
+  }
+  public get WorldHeight() {
+    return this.height_;
+  }
+  public *getSnakes(): Generator<Snake> {
+    for (const actor of this.allActors) {
+      if (actor instanceof Snake) {
+        yield actor;
+      }
     }
   }
 
-  getSnake(): Snake {
-    return this.snake;
-  }
+  public update(steps: number) {
+    const isCollidable = (object: any): object is ICollidable => {
+      return "didCollideWithObject" in object;
+    };
+    let collidedArray: IActor[] = [];
+    this.allActors.forEach((actor) => {
+      actor.move(steps);
+    });
 
-  get width(): number {
-    return this.width_;
-  }
+    this.allActors.forEach((actor, i) => {
+      this.allActors.forEach((other, j) => {
+        if (
+          i !== j &&
+          isCollidable(actor) &&
+          isCollidable(other) &&
+          actor.didCollideWithObject(other)
+        ) {
+          // Avoid adding the same snake more than once
+          if (!collidedArray.includes(actor)) {
+            collidedArray.push(actor);
+            console.log("COLLISION", collidedArray);
+          }
+        }
+      });
+    });
+    // Remove the snakes that collided 
+    collidedArray.forEach((collided) => {
+      const index = this.allActors.indexOf(collided);
+      if (index > -1) {
+        this.allActors.splice(index, 1);
+      }
+    });
 
-  get height(): number {
-    return this.height_;
-  }
-  set view(worldView: IWorldView | null) {
-    this.worldView = worldView;
+    // Update all views
+    this.allViews.forEach((view) => {
+      view.display(this);
+    });
+
+    console.log(this.allActors);
   }
 }
-export default WorldModel;
