@@ -1,38 +1,46 @@
-class GameController {
-    private world: WorldModel;
-    private player1: Player;
-    private player2: Player;
+import WorldModel from "./WorldModel";
+import Player from "./Player";
+import HumanPlayer from "./HumanPlayer";
 
-    constructor(world: WorldModel) {
-        this.world = world;
+export default class GameController {
+  private _world: WorldModel;
+  private _player1: Player | null;
+  private _player2: Player | null;
+  private lastTime: number = 0;
+
+  constructor(worldModel: WorldModel) {
+    this._world = worldModel;
+    this._player1 = null;
+    this._player2 = null;
+  }
+
+  set player1(player1: HumanPlayer) {
+    this._player1 = player1;
+  }
+
+  set player2(player2: Player) {
+    this._player2 = player2;
+  }
+
+  run(): void {
+    this.lastTime = 0;
+    requestAnimationFrame(this.updateFrame.bind(this));
+  }
+
+  private updateFrame(): void {
+    // Assuming both Player and WorldModel have the required methods
+    this._player1!.makeTurn();
+    this._player2!.makeTurn();
+
+    const now = performance.now();
+    const deltaTime = now - this.lastTime;
+    console.log(deltaTime);
+
+    if (deltaTime > 250) {
+      this._world.update(1); // Update world by one step
+      this.lastTime += 50;
     }
 
-    setPlayer1(player: Player): void {
-        this.player1 = player;
-    }
-
-    setPlayer2(player: Player): void {
-        this.player2 = player;
-    }
-
-    run(): void {
-        let lastTime = 0;
-
-        const updateFrame = () => {
-            this.player1.makeTurn();
-            this.player2.makeTurn();
-
-            const currentTime = Date.now();
-            const elapsedTime = currentTime - lastTime;
-
-            if (elapsedTime > 250) {
-                this.world.update(1);
-                lastTime = currentTime - (elapsedTime % 250);
-            }
-
-            requestAnimationFrame(updateFrame);
-        };
-
-        updateFrame();
-    }
+    requestAnimationFrame(this.updateFrame.bind(this));
+  }
 }
