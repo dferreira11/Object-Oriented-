@@ -1,109 +1,69 @@
-import Player from "./Player";
-import SnakeController from "./SnakeController";
+import { clear } from "console";
+import IWorldView from "./IWorldView";
+import WorldModel from "./WorldModel";
 import Snake from "./Snake";
-import Point from "./Point";
-
-//A class that represents a player that avoids walls in a snake game. Extends the Player class and uses the SnakeController to manage the snake's movement.
- 
-class AvoidWallsPlayer extends Player {
-  protected scs: SnakeController[];
-  //Constructs an AvoidWallsPlayer instance. @param {SnakeController} snakeController - An instance of SnakeController to control the snake.
-   
-
-  constructor(snakeControllers: SnakeController[]) {
-    super(snakeControllers); 
-    this.scs = snakeControllers; 
+export default class WorldView implements IWorldView {
+  private scalingFactor: number;
+  private worldCanvas: HTMLCanvasElement;
+  private context: CanvasRenderingContext2D;
+  constructor(scalingFactor: number) {
+    this.scalingFactor = scalingFactor;
+    this.worldCanvas = document.createElement("canvas");
+    this.context = this.worldCanvas.getContext("2d")!;
+    document.body.appendChild(this.worldCanvas);
   }
+  public display(model: WorldModel): void {
+    this.worldCanvas.width = model.WorldWidth * this.scalingFactor;
+    this.worldCanvas.height = model.WorldHeight * this.scalingFactor;
 
-  //Determines and makes the next turn for the snake avoiding the walls.
-   
+    this.context.clearRect(
+      0,
+      0,
+      this.worldCanvas.width,
+      this.worldCanvas.height,
+    );
+    this.context.fillStyle = "black"; // For example, setting the color to white
+    console.log(this.worldCanvas.width, this.worldCanvas.height);
 
-  makeTurn(): void {
-    this.scs.forEach((sc) => {
-      const snakeDirection = sc.snakeDirection;
-      const position = sc.snakePosition;
-      const worldHeight = sc.WorldModel.WorldHeight;
-      const worldWidth = sc.WorldModel.WorldWidth;
+    // Draw a filled rectangle
+    // Parameters: x-coordinate, y-coordinate, width, height
+    this.context.fillRect(
+      0,
+      0,
+      this.worldCanvas.width,
+      this.worldCanvas.height,
+    ); // Draw the world with the specified dimensions (model.WorldWidth, model.WorldHeight);
+    console.log("Dimensions:", this.worldCanvas.width, this.worldCanvas.height);
 
-      switch (snakeDirection) {
-        case "left":
-          this.handleMovingLeft(sc, position, worldHeight);
-          break;
-        case "right":
-          this.handleMovingRight(sc, position, worldWidth, worldHeight);
-          console.log("Right Handling");
-          break;
-        case "up":
-          this.handleMovingUp(sc, position, worldWidth);
-          break;
-        case "down":
-          this.handleMovingDown(sc, position, worldWidth, worldHeight);
-          break;
-        default:
-          console.log("Unknown direction");
-      }
-    });
-  }
-
-  private handleMovingLeft(
-    sc: SnakeController, 
-    position: Point,
-    worldHeight: number,
-  ): void {
-    if (position.x <= 0) {
-      if (position.y <= worldHeight / 2) {
-        sc.turnSnakeDown(); 
-      } else {
-        sc.turnSnakeUp();
-      }
+    // Iterate over each snake and draw its parts
+    for (const snake of model.getSnakes()) {
+      this.context.fillStyle = snake.color__; // Set the color for each snake
+      snake.parts.forEach((part) => {
+        this.context.fillRect(
+          part.x * this.scalingFactor,
+          part.y * this.scalingFactor,
+          this.scalingFactor,
+          this.scalingFactor,
+        );
+      });
     }
   }
-
-  private handleMovingRight(
-    sc: SnakeController,
-    position: Point,
-    worldWidth: number,
-    worldHeight: number,
-  ): void {
-    if (position.x >= worldWidth - 1) {
-      if (position.y <= worldHeight / 2) {
-        sc.turnSnakeDown();
-        console.log("turning down from right");
-      } else {
-        sc.turnSnakeUp();
-        console.log("turning up from right");
-      }
-    }
+  public get scaleFactor(): number {
+    return this.scalingFactor;
   }
 
-  private handleMovingUp(
-    sc: SnakeController,
-    position: Point,
-    worldWidth: number,
-  ): void {
-    if (position.y <= 0) {
-      if (position.x >= worldWidth / 2) {
-        sc.turnSnakeLeft();
-      } else {
-        sc.turnSnakeRight();
-      }
-    }
+  public get canvas(): HTMLCanvasElement {
+    return this.worldCanvas;
   }
 
-  private handleMovingDown(
-    sc: SnakeController,
-    position: Point,
-    worldWidth: number,
-    worldHeight: number,
-  ): void {
-    if (position.y >= worldHeight - 1) {
-      if (position.x >= worldWidth / 2) {
-        sc.turnSnakeLeft();
-      } else {
-        sc.turnSnakeRight();
-      }
-    }
+  public get conText(): CanvasRenderingContext2D {
+    return this.context;
+  }
+  public set canvas(value: HTMLCanvasElement) {
+    this.worldCanvas = value;
+  }
+
+  public set conText(value: CanvasRenderingContext2D) {
+    this.context = value;
   }
 }
-
-export default AvoidWallsPlayer;
