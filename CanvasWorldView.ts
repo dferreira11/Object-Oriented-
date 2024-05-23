@@ -3,25 +3,20 @@ import SnakeController from "./SnakeController";
 import Snake from "./Snake";
 import Point from "./Point";
 
-/**
- * A class representing a player that avoids walls in a snake game.
- * It extends the Player class and uses the SnakeController to manage the snake's movement.
- */
+//A class that represents a player that avoids walls in a snake game. Extends the Player class and uses the SnakeController to manage the snake's movement.
+ 
 class AvoidWallsPlayer extends Player {
   protected scs: SnakeController[];
-  /**
-   * Constructs an AvoidWallsPlayer instance.
-   * @param {SnakeController} snakeController - An instance of SnakeController to control the snake.
-   */
+  //Constructs an AvoidWallsPlayer instance. @param {SnakeController} snakeController - An instance of SnakeController to control the snake.
+   
 
   constructor(snakeControllers: SnakeController[]) {
-    super(snakeControllers); // Call the parent class constructor
-    this.scs = snakeControllers; // Store the SnakeController instance for later use
+    super(snakeControllers); 
+    this.scs = snakeControllers; 
   }
 
-  /**
-   * Determines and makes the next turn for the snake, avoiding walls.
-   */
+  //Determines and makes the next turn for the snake avoiding the walls.
+   
 
   makeTurn(): void {
     this.scs.forEach((sc) => {
@@ -51,13 +46,13 @@ class AvoidWallsPlayer extends Player {
   }
 
   private handleMovingLeft(
-    sc: SnakeController, // 'sc' is now a parameter of this method
+    sc: SnakeController, 
     position: Point,
     worldHeight: number,
   ): void {
     if (position.x <= 0) {
       if (position.y <= worldHeight / 2) {
-        sc.turnSnakeDown(); // Correctly using 'sc' here
+        sc.turnSnakeDown(); 
       } else {
         sc.turnSnakeUp();
       }
