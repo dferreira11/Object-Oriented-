@@ -1,34 +1,38 @@
-class LRKeyInputHandler implements IInputHandler {
-    private wasLeftArrowPushed: boolean;
-    private wasRightArrowPushed: boolean;
+// LRKeyInputHandler.ts
+import IInputHandler from "./IInputHandler";
 
-    constructor() {
-        this.wasLeftArrowPushed = false;
-        this.wasRightArrowPushed = false;
-        window.addEventListener('keydown', this.handleKeyDown.bind(this));
-    }
+export default class LRKeyInputHandler implements IInputHandler {
+  private wasLeftArrowPushed: boolean = false;
+  private wasRightArrowPushed: boolean = false;
 
-    private handleKeyDown(event: KeyboardEvent): void {
-        if (event.key === 'ArrowLeft') {
-            this.wasLeftArrowPushed = true;
-        } else if (event.key === 'ArrowRight') {
-            this.wasRightArrowPushed = true;
-        }
-    }
+  constructor() {
+    // Set up event listeners for keydown events
+    window.addEventListener("keydown", this.handleKeyDown.bind(this));
+  }
 
-    madeLeftMove(): boolean {
-        return this.wasLeftArrowPushed;
+  private handleKeyDown(event: KeyboardEvent): void {
+    if (event.key === "ArrowLeft") {
+      this.wasLeftArrowPushed = true;
+      console.log("ArrowLeft was pushed");
+    } else if (event.key === "ArrowRight") {
+      this.wasRightArrowPushed = true;
+      console.log("ArrowRight was pushed");
     }
+  }
 
-    madeRightMove(): boolean {
-        return this.wasRightArrowPushed;
-    }
+  public madeLeftMove(): boolean {
+    return this.wasLeftArrowPushed;
+  }
 
-    resetLeftMove(): void {
-        this.wasLeftArrowPushed = false;
-    }
+  public madeRightMove(): boolean {
+    return this.wasRightArrowPushed;
+  }
 
-    resetRightMove(): void {
-        this.wasRightArrowPushed = false;
-    }
+  public resetLeftMove(): void {
+    this.wasLeftArrowPushed = false;
+  }
+
+  public resetRightMove(): void {
+    this.wasRightArrowPushed = false;
+  }
 }
