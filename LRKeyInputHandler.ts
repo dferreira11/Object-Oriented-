@@ -1,4 +1,3 @@
-// LRKeyInputHandler.ts
 import IInputHandler from "./IInputHandler";
 
 export default class LRKeyInputHandler implements IInputHandler {
